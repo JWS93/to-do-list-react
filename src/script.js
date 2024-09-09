@@ -99,7 +99,7 @@ class ToDoList extends React.Component {
       return;
     }
 
-    fetch(`https://fewd-todolist-api.onrender.com/tasks?api_key=1261`, {
+    fetch(`https://fewd-todolist-api.onrender.com/tasks/${id}?api_key=1261`, {
       method: "DELETE",
       mode: "cors",
     }).then(checkStatus)

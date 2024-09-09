@@ -151,7 +151,7 @@ var ToDoList = function (_React$Component2) {
         return;
       }
 
-      fetch("https://fewd-todolist-api.onrender.com/tasks?api_key=1261", {
+      fetch("https://fewd-todolist-api.onrender.com/tasks/" + id + "?api_key=1261", {
         method: "DELETE",
         mode: "cors"
       }).then(checkStatus).then(json).then(function (data) {
