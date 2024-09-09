@@ -41,6 +41,7 @@ class ToDoList extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fetchTasks = this.fetchTasks.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
+    this.toggleComplete = this.toggleComplete.bind(this);
   }
 
 
@@ -113,6 +114,26 @@ class ToDoList extends React.Component {
       })
   }
 
+  toggleComplete(id, completed) {
+    if (!id) {
+      return;
+    }
+    const newState = completed ? 'active' : 'complete';
+
+    fetch(`https://fewd-todolist-api.onrender.com/tasks/${id}/mark_${newState}?api_key=1261`, {
+      method: "PUT",
+      mode: "cors",
+    }).then(checkStatus)
+      .then(json)
+      .then((data) => {
+        this.fetchTasks();
+      })
+      .catch((erro) => {
+        this.setState({ error: error.message });
+        console.log(error);
+      })
+  }
+
   render() {
     const { new_task, tasks } = this.state;
 
@@ -126,6 +147,7 @@ class ToDoList extends React.Component {
                 key = {task.id} 
                 task = {task}
                 onDelete = {this.deleteTask}
+                onComplete = {this.toggleComplete}
               />);
             }) : <p>no tasks here</p>}
             <form onSubmit = {this.handleSubmit} className = "form-inline my-4">

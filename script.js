@@ -87,6 +87,7 @@ var ToDoList = function (_React$Component2) {
     _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
     _this2.fetchTasks = _this2.fetchTasks.bind(_this2);
     _this2.deleteTask = _this2.deleteTask.bind(_this2);
+    _this2.toggleComplete = _this2.toggleComplete.bind(_this2);
     return _this2;
   }
 
@@ -162,9 +163,29 @@ var ToDoList = function (_React$Component2) {
       });
     }
   }, {
+    key: "toggleComplete",
+    value: function toggleComplete(id, completed) {
+      var _this6 = this;
+
+      if (!id) {
+        return;
+      }
+      var newState = completed ? 'active' : 'complete';
+
+      fetch("https://fewd-todolist-api.onrender.com/tasks/" + id + "/mark_" + newState + "?api_key=1261", {
+        method: "PUT",
+        mode: "cors"
+      }).then(checkStatus).then(json).then(function (data) {
+        _this6.fetchTasks();
+      }).catch(function (erro) {
+        _this6.setState({ error: error.message });
+        console.log(error);
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this7 = this;
 
       var _state = this.state,
           new_task = _state.new_task,
@@ -189,7 +210,8 @@ var ToDoList = function (_React$Component2) {
               return React.createElement(Task, {
                 key: task.id,
                 task: task,
-                onDelete: _this6.deleteTask
+                onDelete: _this7.deleteTask,
+                onComplete: _this7.toggleComplete
               });
             }) : React.createElement(
               "p",
