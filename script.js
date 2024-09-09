@@ -10,84 +10,149 @@ var checkStatus = function checkStatus(response) {
   if (response.ok) {
     return response;
   }
-  throw new Error('response was either 404 or 500');
+  throw new Error('request was either 404 or 500');
 };
 
 var json = function json(response) {
   return response.json();
 };
 
-var ToDoList = function (_React$Component) {
-  _inherits(ToDoList, _React$Component);
+var Task = function (_React$Component) {
+  _inherits(Task, _React$Component);
+
+  function Task() {
+    _classCallCheck(this, Task);
+
+    return _possibleConstructorReturn(this, (Task.__proto__ || Object.getPrototypeOf(Task)).apply(this, arguments));
+  }
+
+  _createClass(Task, [{
+    key: "render",
+    value: function render() {
+      var _props = this.props,
+          task = _props.task,
+          onDelete = _props.onDelete,
+          onComplete = _props.onComplete;
+      var id = task.id,
+          content = task.content,
+          completed = task.completed;
+
+
+      return React.createElement(
+        "div",
+        { className: "row mb-1" },
+        React.createElement(
+          "p",
+          { className: "col" },
+          content
+        ),
+        React.createElement(
+          "button",
+          {
+            onClick: function onClick() {
+              return onDelete(id);
+            }
+          },
+          "Delete"
+        ),
+        React.createElement("input", {
+          className: "d-inline-block mt-2",
+          type: "checkbox",
+          onChange: function onChange() {
+            return onComplete(id, completed);
+          },
+          checked: completed
+        })
+      );
+    }
+  }]);
+
+  return Task;
+}(React.Component);
+
+var ToDoList = function (_React$Component2) {
+  _inherits(ToDoList, _React$Component2);
 
   function ToDoList(props) {
     _classCallCheck(this, ToDoList);
 
-    var _this = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
+    var _this2 = _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).call(this, props));
 
-    _this.state = {
+    _this2.state = {
       new_task: '',
       tasks: []
     };
 
-    _this.handleChange = _this.handleChange.bind(_this);
-    _this.handleSubmit = _this.handleSubmit.bind(_this);
-    return _this;
+    _this2.handleChange = _this2.handleChange.bind(_this2);
+    _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
+    return _this2;
   }
 
   _createClass(ToDoList, [{
-    key: 'handleChange',
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this3 = this;
+
+      fetch("https://fewd-todolist-api.onrender.com/tasks?api_key=1261").then(checkStatus).then(json).then(function (response) {
+        console.log(response);
+        _this3.setState({ tasks: response.tasks });
+      }).catch(function (error) {
+        console.log(error.message);
+      });
+    }
+  }, {
+    key: "handleChange",
     value: function handleChange(event) {
       this.setState({ new_task: event.target.value });
     }
   }, {
-    key: 'handleSubmit',
+    key: "handleSubmit",
     value: function handleSubmit(event) {
       event.preventDefault();
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _state = this.state,
-          new_tasks = _state.new_tasks,
+          new_task = _state.new_task,
           tasks = _state.tasks;
 
 
       return React.createElement(
-        'div',
-        { className: 'container' },
+        "div",
+        { className: "container" },
         React.createElement(
-          'div',
-          { className: 'row' },
+          "div",
+          { className: "row" },
           React.createElement(
-            'div',
-            { className: 'col-12' },
+            "div",
+            { className: "col-12" },
             React.createElement(
-              'h2',
-              { className: 'mb-3' },
-              'To Do List'
+              "h2",
+              { className: "mb-3" },
+              "To Do List"
             ),
             tasks.length > 0 ? tasks.map(function (task) {
-              return null;
+              return React.createElement(Task, { key: task.id, task: task });
             }) : React.createElement(
-              'p',
+              "p",
               null,
-              'no tasks here'
+              "no tasks here"
             ),
             React.createElement(
-              'form',
-              { onSubmit: handleSubmit, className: 'form-inline my-4' },
-              React.createElement('input', {
-                type: 'text',
-                className: 'form-control mb-2 mr-sm-2',
-                placeholder: 'new task',
+              "form",
+              { onSubmit: this.handleSubmit, className: "form-inline my-4" },
+              React.createElement("input", {
+                type: "text",
+                className: "form-control mb-2 mr-sm-2",
+                placeholder: "new task",
                 value: new_task,
-                onChange: handleChange
+                onChange: this.handleChange
               }),
               React.createElement(
-                'button',
-                { className: 'btn btn-primary mb-2' },
-                'Submit'
+                "button",
+                { className: "btn btn-primary mb-2" },
+                "Submit"
               )
             )
           )
@@ -100,5 +165,5 @@ var ToDoList = function (_React$Component) {
 }(React.Component);
 
 var container = document.getElementById('root');
-var root = ReactDOM.createRoot('container');
+var root = ReactDOM.createRoot(container);
 root.render(React.createElement(ToDoList, null));
