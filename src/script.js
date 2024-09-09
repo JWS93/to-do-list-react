@@ -39,9 +39,16 @@ class ToDoList extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.fetchTasks = this.fetchTasks.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
   }
 
+
   componentDidMount() {
+    this.fetchTasks();
+  }
+
+  fetchTasks() {
     fetch("https://fewd-todolist-api.onrender.com/tasks?api_key=1261")
       .then(checkStatus)
       .then(json)
@@ -60,6 +67,50 @@ class ToDoList extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    let { new_task } = this.state;
+    new_task = new_task.trim();
+    if (!new_task) {
+      return;
+    }
+
+    fetch("https://fewd-todolist-api.onrender.com/tasks?api_key=1261", {
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        task: {
+          content: new_task
+        }
+      }),
+    }).then(checkStatus)
+      .then(json)
+      .then((data) => {
+        this.setState({ new_task: '' });
+        this.fetchTasks();
+      })
+      .catch((error) => {
+        this.seState({ error: error.message });
+        console.log(error);
+      })
+  }
+
+  deleteTask(id) {
+    if (!id) {
+      return;
+    }
+
+    fetch(`https://fewd-todolist-api.onrender.com/tasks?api_key=1261`, {
+      method: "DELETE",
+      mode: "cors",
+    }).then(checkStatus)
+      .then(json)
+      .then((data) => {
+        this.fetchTasks();
+      })
+      .catch((error) => {
+        this.setState({ error: error.message });
+        console.log(error);
+      })
   }
 
   render() {
@@ -71,7 +122,11 @@ class ToDoList extends React.Component {
           <div className = "col-12">
             <h2 className = "mb-3">To Do List</h2>
             {tasks.length > 0 ? tasks.map((task) => {
-              return <Task key = {task.id} task = {task} />;
+              return (<Task 
+                key = {task.id} 
+                task = {task}
+                onDelete = {this.deleteTask}
+              />);
             }) : <p>no tasks here</p>}
             <form onSubmit = {this.handleSubmit} className = "form-inline my-4">
               <input
