@@ -48,7 +48,7 @@ var Task = function (_React$Component) {
         ),
         React.createElement(
           "button",
-          {
+          { className: "btn-sm mr-2",
             onClick: function onClick() {
               return onDelete(id);
             }
@@ -56,7 +56,7 @@ var Task = function (_React$Component) {
           "Delete"
         ),
         React.createElement("input", {
-          className: "d-inline-block mt-2",
+          className: "d-inline-block mt-1",
           type: "checkbox",
           onChange: function onChange() {
             return onComplete(id, completed);
@@ -242,19 +242,19 @@ var ToDoList = function (_React$Component2) {
               { className: "mt-3" },
               React.createElement(
                 "label",
-                null,
+                { className: "mr-2" },
                 React.createElement("input", { type: "checkbox", name: "all", checked: filter === "all", onChange: this.toggleFilter }),
                 " All"
               ),
               React.createElement(
                 "label",
-                null,
+                { className: "mx-2" },
                 React.createElement("input", { type: "checkbox", name: "active", checked: filter === "active", onChange: this.toggleFilter }),
                 " Active"
               ),
               React.createElement(
                 "label",
-                null,
+                { className: "mx-2" },
                 React.createElement("input", { type: "checkbox", name: "completed", checked: filter === "completed", onChange: this.toggleFilter }),
                 " Completed"
               )

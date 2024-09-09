@@ -15,11 +15,11 @@ class Task extends React.Component {
     return (
       <div className = "row mb-1">
         <p className = "col">{content}</p>
-        <button
+        <button className = "btn-sm mr-2"
           onClick = {() => onDelete(id)}
         >Delete</button>
         <input
-          className = "d-inline-block mt-2"
+          className = "d-inline-block mt-1"
           type = "checkbox"
           onChange = {() => onComplete(id, completed)}
           checked = {completed}
@@ -169,13 +169,13 @@ class ToDoList extends React.Component {
               );
             }) : <p>no tasks here</p>}
             <div className = "mt-3">
-              <label>
+              <label className = "mr-2">
                 <input type = "checkbox" name = "all" checked = {filter === "all"} onChange = {this.toggleFilter} /> All
               </label>
-              <label>
+              <label className = "mx-2">
                 <input type = "checkbox" name = "active" checked = {filter === "active"} onChange = {this.toggleFilter} /> Active
               </label>
-              <label>
+              <label className = "mx-2">
                 <input type = "checkbox" name = "completed" checked = {filter === "completed"} onChange = {this.toggleFilter} /> Completed
               </label>
             </div>
